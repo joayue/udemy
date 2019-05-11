@@ -1,46 +1,67 @@
-    
-   // Start introducing the iostream library to use it in our code
+#include <iostream>
+#include <ctime>
 
-    # include <iostream>
-    
-    // Declare the main function 
+void PrintIntroduction(int Difficulty)
+{
+    std::cout << "\n\nYou are a secret agent breaking into a level " << Difficulty;
+    std::cout << " secure server room...\nEnter the correct code to continue...\n\n";
+}
 
-      int main ()
-    {    
-   
-    // We introduce some expresion statements to welcome our player
-        
-       std::cout << "You are a secret agent breaking into a secure server room...";
-       std::cout << std::endl;
-       std::cout << "Enter the correct code to continue...";
-       std::cout << std::endl;
+bool PlayGame(int Difficulty)
+{
+    PrintIntroduction (Difficulty);
+    const int CodeA = rand () % Difficulty + Difficulty;
+    const int CodeB = rand () % Difficulty + Difficulty;
+    const int CodeC = rand () % Difficulty + Difficulty;
 
-    // Assign the value of all our need variables
-        
-       int CodeA = 4;
-       int CodeB = 3;
-       int CodeC = 2;
-        
-     // Assign two variables that sums and multiplies our first variables
+    const int CodeSum = CodeA + CodeB + CodeC;
+    const int CodeProduct = CodeA * CodeB * CodeC;
 
-       int CodeSum = CodeA + CodeB + CodeC;
-       int CodeProduct = CodeA * CodeB * CodeC;
-        
-    // Show rules to solve the code
-    
-       std::cout << "- The code is made of 3 numbers" << std::endl;
-       std::cout << "- This 3 numbers sum is : " << CodeSum << std::endl;
-       std::cout << "- Their product is : " << CodeProduct << std::endl;
+    // Print CodeSum and CodeProduct to the terminal
+    std::cout << std::endl;
+    std::cout << "+ There are 3 numbers in the code" << std::endl;
+    std::cout << "+ The codes add-up to: " << CodeSum << std::endl;
+    std::cout << "+ The codes multiply to give: " << CodeProduct << std::endl;
 
-    // Asks the player afor an answer
+    // Store player guess
+    int GuessA, GuessB, GuessC;
+    std::cin >> GuessA >> GuessB >> GuessC;
 
-      int PlayerAnswer[3];
-      std::cout << "- Introduce the Code : " << std::endl;
-      std::cin >> PlayerAnswer[3];
-      std::cout << "- Your answer is " << PlayerAnswer[1] << PlayerAnswer[2] << PlayerAnswer [3] << std::endl;   
+    int GuessSum = GuessA + GuessB + GuessC;
+    int GuessProduct = GuessA * GuessB * GuessC;
 
-        
-    // Returns 0 to verify everything is ok and finish
-        
-       return 0;
+    // Check if the players guess is correct
+    if (GuessSum == CodeSum && GuessProduct == CodeProduct)
+    {
+        std::cout << "\n+ Well done Agent! You have extracted a file! Keep going!!" << std::endl;
+        return true;
     }
+
+    else
+    {
+        std::cout << "\n+ You entered the wrong code! Careful agent! Try again!!" << std::endl;
+        return false;
+    }
+    
+}
+
+int main()
+{
+    srand(time(NULL));
+    int LevelDifficulty = 1;
+    const int MaxLevel = 5;
+    
+    while (LevelDifficulty <= MaxLevel)  //Loop the game until all levels are completed
+    {
+      bool bLevelComplete = PlayGame(LevelDifficulty);           
+      std::cin.clear();   //Clears any errors
+      std::cin.ignore();  //Discards the buffer
+
+      if (bLevelComplete)
+      {
+        ++LevelDifficulty;          
+      }      
+    }
+    std::cout << "\n+ Great work agent!! You got all files! Now get out of there!!!! \n";  
+    return 0;   
+}
